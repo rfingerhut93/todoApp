@@ -5,6 +5,12 @@ export default function App(){
   const [newItem, setNewItem] = useState("");
   const [todos, setTodos] = useState([]);
 
+
+  {/* Sets new item has whatever is typed into the input box.
+      Sets title as what was typed, gives a random id, and 
+      sets completed as false (used with checkbox).
+      New item is set back to an empty array at the end to
+      clear the input field. */}
   function handleSubmit(e){
     e.preventDefault();
 
@@ -14,7 +20,24 @@ export default function App(){
         {id: crypto.randomUUID(), title: newItem, completed: false},
       ]
     })
+
+    setNewItem("");
   }
+
+  {/* Maps through todo array for the key/id and then toggles the
+      checked state of the check box and the todo element. */}
+  function toggleTodo(id, completed){
+    setTodos(currentTodos => {
+      return currentTodos.map(todo => {
+        if (todo.id === id){
+          return {...todo, completed}
+        }
+        return todo
+      })
+    })
+  }
+
+
 
   return (
     <>
@@ -37,9 +60,9 @@ export default function App(){
 
         {todos.map(todo => {
           return(
-            <li>
+            <li key={todo.id}>
               <label>
-                <input type="checkbox" checked={todo.completed}/>
+                <input type="checkbox" checked={todo.completed} onChange={e => toggleTodo(todo.id, e.checked)}/>
                 {todo.title}
               </label>
               <button className="btn btn-danger">Delete</button>
