@@ -1,27 +1,17 @@
 import {useState} from 'react'
 import "./styles.css"
+import { NewTodoForm } from './NewTodoForm';
 
 export default function App(){
-  const [newItem, setNewItem] = useState("");
   const [todos, setTodos] = useState([]);
 
-
-  {/* Sets new item has whatever is typed into the input box.
-      Sets title as what was typed, gives a random id, and 
-      sets completed as false (used with checkbox).
-      New item is set back to an empty array at the end to
-      clear the input field. */}
-  function handleSubmit(e){
-    e.preventDefault();
-
+  function addTodo(title){
     setTodos((currentTodos) => {
       return [
         ...currentTodos, 
-        {id: crypto.randomUUID(), title: newItem, completed: false},
+        {id: crypto.randomUUID(), title, completed: false},
       ]
     })
-
-    setNewItem("");
   }
 
   {/* Maps through todo array for the key/id and then toggles the
@@ -45,20 +35,7 @@ function deleteTodo(id){
 
   return (
     <>
-      <form onSubmit={handleSubmit} action="" className="new-item-form">
-        <div className="form-row">
-          <label htmlFor="item">New Item</label>
-          {/* This sets the value with every new character entered into the input box.
-           e => setNewItem(e.target.value) */}
-          <input onChange={e =>
-            setNewItem(e.target.value)}
-            type="text"
-            id="item"
-            value={newItem}/>
-        </div>
-        <button className="btn ">Add</button>
-      </form>
-
+    <NewTodoForm onSubmit={addTodo}/>
       <h1 className="header">Todo List</h1>
       <ul className="list">
         {todos.length === 0 && "No todos"}
